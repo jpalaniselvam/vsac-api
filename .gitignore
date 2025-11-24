@@ -1,0 +1,17 @@
+# Node.js
+node_modules/
+npm-debug.log*
+.env.*
+
+# TypeScript
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+.vscode/
