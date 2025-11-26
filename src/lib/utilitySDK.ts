@@ -95,7 +95,7 @@ export class UtilitySDK {
      * @returns List of versions (converted from XML to JSON)
      * @example
      * const versions = await sdk.getOidVersions('2.16.840.1.114222.4.11.836');
-     * // Returns: { VersionList: { '@_oid': '...', version: [...] } }
+     * // Returns: { VersionList: { '_oid': '...', version: [...] } }
      */
     async getOidVersions(oid: string): Promise<VersionListResponse> {
         if (!oid) {

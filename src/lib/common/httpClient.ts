@@ -46,24 +46,19 @@ export class HttpClient {
 
                 res.on('end', () => {
                     try {
-                        // Check if response is successful
                         if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
                             reject(new Error(`HTTP ${res.statusCode}: ${data}`));
                             return;
                         }
 
-                        // Determine content type
                         const contentType = res.headers['content-type'] || '';
 
                         let parsedData: unknown;
                         if (contentType.includes('application/json')) {
-                            // Parse JSON response
                             parsedData = JSON.parse(data);
                         } else if (contentType.includes('xml') || data.trim().startsWith('<?xml')) {
-                            // Parse XML response and convert to JSON
                             parsedData = this.xmlParser.parse(data);
                         } else {
-                            // Try to parse as JSON first, fallback to XML
                             try {
                                 parsedData = JSON.parse(data);
                             } catch {
@@ -83,7 +78,6 @@ export class HttpClient {
                 reject(new Error(`Request failed: ${error.message}`));
             });
 
-            // Set timeout if provided
             if (options.timeout) {
                 req.setTimeout(options.timeout, () => {
                     req.destroy();

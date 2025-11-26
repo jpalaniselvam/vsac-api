@@ -52,7 +52,7 @@ export interface LatestProfileResponse {
  */
 export interface VersionListResponse {
     VersionList: {
-        '@_oid': string;
+        _oid: string,
         version: string | string[];
     };
 }
@@ -80,7 +80,7 @@ export interface TagNamesResponse {
  */
 export interface TagValuesResponse {
     tagValues: {
-        '@_tagName': string;
+        _tagName: string,
         value: string | string[];
     };
 }
