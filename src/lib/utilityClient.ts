@@ -101,7 +101,11 @@ export class UtilityClient {
         if (!oid) {
             throw new Error('OID is required');
         }
-        return this.client.get(`/vsac/oid/${encodeURIComponent(oid)}/versions`) as Promise<VersionListResponse>;
+        const response = await this.client.get(`/vsac/oid/${encodeURIComponent(oid)}/versions`) as VersionListResponse;
+        if (response.VersionList.version && !Array.isArray(response.VersionList.version)) {
+            response.VersionList.version = [response.VersionList.version];
+        }
+        return response;
     }
 
     /**
@@ -112,7 +116,11 @@ export class UtilityClient {
      * // Returns: { ProfileList: { profile: [...] } }
      */
     async getProfiles(): Promise<ProfileListResponse> {
-        return this.client.get('/vsac/profiles') as Promise<ProfileListResponse>;
+        const response = await this.client.get('/vsac/profiles') as ProfileListResponse;
+        if (response.ProfileList.profile && !Array.isArray(response.ProfileList.profile)) {
+            response.ProfileList.profile = [response.ProfileList.profile];
+        }
+        return response;
     }
 
     /**
@@ -138,7 +146,11 @@ export class UtilityClient {
      * // Returns: { tagNames: { name: [...] } }
      */
     async getTagNames(): Promise<TagNamesResponse> {
-        return this.client.get('/vsac/tagNames') as Promise<TagNamesResponse>;
+        const response = await this.client.get('/vsac/tagNames') as TagNamesResponse;
+        if (response.tagNames.name && !Array.isArray(response.tagNames.name)) {
+            response.tagNames.name = [response.tagNames.name];
+        }
+        return response;
     }
 
     /**
@@ -153,6 +165,10 @@ export class UtilityClient {
         if (!tagName) {
             throw new Error('Tag name is required');
         }
-        return this.client.get(`/vsac/tagName/${encodeURIComponent(tagName)}/tagValues`) as Promise<TagValuesResponse>;
+        const response = (await this.client.get(`/vsac/tagName/${encodeURIComponent(tagName)}/tagValues`)) as TagValuesResponse;
+        if (response.tagValues.value && !Array.isArray(response.tagValues.value)) {
+            response.tagValues.value = [response.tagValues.value];
+        }
+        return response;
     }
 }
