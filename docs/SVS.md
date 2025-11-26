@@ -38,6 +38,133 @@ You can find your API Key in the My Profile area of the UMLS Terminology Service
 | GET | /RetrieveMultipleValueSets?id={oid}&effectiveDate={yyyymmdd} | **Retrieve a Value Set Expansion Published on or before a Specific Date** | |
 | GET | /RetrieveMultipleValueSets?id={oid}&effectiveDate={yyyymmdd}&programType=eCQM | **Retrieve a Value Set Expansion Published on or before a Specific Date** in the most recent eCQM program release. | |
 
+
+
+#### RetrieveValueSet Response
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns0:RetrieveValueSetResponse
+  xmlns:ns0="urn:ihe:iti:svs:2008"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns0:ValueSet ID="2.16.840.1.114222.4.11.837" displayName="Ethnicity" version="Latest">
+    <ns0:ConceptList>
+      <ns0:Concept code="2135-2" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Hispanic or Latino"/>
+      <ns0:Concept code="2186-5" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Not Hispanic or Latino"/>
+    </ns0:ConceptList>
+  </ns0:ValueSet>
+</ns0:RetrieveValueSetResponse>
+```
+This response should be converted to
+```json
+{
+    "id": "2.16.840.1.114222.4.11.837",
+    "displayName": "Ethnicity",
+    "version": "Latest",
+    "Concepts": [
+      {
+        "code": "2135-2",
+        "codeSystem": "2.16.840.1.113883.6.238",
+        "codeSystemName": "CDCREC",
+        "codeSystemVersion": "1.3",
+        "displayName": "Hispanic or Latino"
+      },
+      {
+        "code": "2186-5",
+        "codeSystem": "2.16.840.1.113883.6.238",
+        "codeSystemName": "CDCREC",
+        "codeSystemVersion": "1.3",
+        "displayName": "Not Hispanic or Latino"
+      }
+    ]
+}
+```
+
+#### RetrieveMultiplValuesets Reponse
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns0:RetrieveMultipleValueSetsResponse
+  xmlns:ns0="urn:ihe:iti:svs:2008"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns0:DescribedValueSet ID="2.16.840.1.114222.4.11.836" displayName="Race" version="Latest">
+    <ns0:ConceptList>
+      <ns0:Concept code="1002-5" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="AMERICAN INDIAN OR ALASKA NATIVE"/>
+      <ns0:Concept code="2028-9" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Asian"/>
+      <ns0:Concept code="2054-5" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Black or African American"/>
+      <ns0:Concept code="2076-8" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Native Hawaiian or Other Pacific Islander"/>
+      <ns0:Concept code="2106-3" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="White"/>
+      <ns0:Concept code="2131-1" codeSystem="2.16.840.1.113883.6.238" codeSystemName="CDCREC" codeSystemVersion="1.3" displayName="Other Race"/>
+    </ns0:ConceptList>
+    <ns0:Source>Centers for Disease Control National Center for Health Statistics</ns0:Source>
+    <ns0:Purpose>(Clinical Focus: ),(Data Element Scope: ),(Inclusion Criteria: ),(Exclusion Criteria: )</ns0:Purpose>
+    <ns0:Type>Extensional</ns0:Type>
+    <ns0:Binding>Dynamic</ns0:Binding>
+    <ns0:Status>Active</ns0:Status>
+    <ns0:RevisionDate>2012-10-25</ns0:RevisionDate>
+  </ns0:DescribedValueSet>
+</ns0:RetrieveMultipleValueSetsResponse>
+```
+
+This should be converted to
+```json
+{
+      {
+        "id": "2.16.840.1.114222.4.11.836",
+        "displayName": "Race",
+        "version": "Latest",
+        "Concepts": [
+          {
+            "code": "1002-5",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "AMERICAN INDIAN OR ALASKA NATIVE"
+          },
+          {
+            "code": "2028-9",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "Asian"
+          },
+          {
+            "code": "2054-5",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "Black or African American"
+          },
+          {
+            "code": "2076-8",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "Native Hawaiian or Other Pacific Islander"
+          },
+          {
+            "code": "2106-3",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "White"
+          },
+          {
+            "code": "2131-1",
+            "codeSystem": "2.16.840.1.113883.6.238",
+            "codeSystemName": "CDCREC",
+            "codeSystemVersion": "1.3",
+            "displayName": "Other Race"
+          }
+        ],
+        "source": "Centers for Disease Control National Center for Health Statistics",
+        "purpose": "(Clinical Focus: ),(Data Element Scope: ),(Inclusion Criteria: ),(Exclusion Criteria: )",
+        "type": "Extensional",
+        "binding": "Dynamic",
+        "status": "Active",
+        "revisionDate": "2012-10-25"
+      }
+}
+```
+
 ### Parameter Descriptions
 | Parameter | Description | Use Case |
 |---|---|---|

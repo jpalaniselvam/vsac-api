@@ -25,7 +25,7 @@ npm install vsac-api
 ```javascript
 import { UtilitySDK } from 'vsac-api';
 
-const sdk = new UtilitySDK({
+const sdk = new UtilityClient({
   baseURL: 'https://vsac.nlm.nih.gov'
 });
 ```
@@ -108,7 +108,7 @@ const tagValues = await sdk.getTagValues('CMS eMeasure ID');
 import { UtilitySDK } from 'vsac-api';
 
 async function main() {
-  const sdk = new UtilitySDK({
+  const sdk = new UtilityClient({
     baseURL: 'https://vsac.nlm.nih.gov'
   });
 

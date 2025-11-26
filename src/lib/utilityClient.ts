@@ -14,7 +14,7 @@ import type {
  * SDK for VSAC Utility Endpoints
  * Provides methods to interact with VSAC utility API endpoints
  */
-export class UtilitySDK {
+export class UtilityClient {
     private client: HttpClient;
 
     /**
