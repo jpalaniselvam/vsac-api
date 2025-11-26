@@ -192,7 +192,7 @@ export class SVSClient {
 
         const queryString = this.buildQueryString(params);
         const response = await this.client.get(
-            `/RetrieveValueSet${queryString}`,
+            `/vsac/svs/RetrieveValueSet${queryString}`,
             { headers: this.getAuthHeaders() }
         ) as RetrieveValueSetXMLResponse;
 
@@ -265,7 +265,7 @@ export class SVSClient {
 
         const queryString = this.buildQueryString(params);
         const response = await this.client.get(
-            `/RetrieveMultipleValueSets${queryString}`,
+            `/vsac/svs/RetrieveMultipleValueSets${queryString}`,
             { headers: this.getAuthHeaders() }
         ) as RetrieveMultipleValueSetsXMLResponse;
 
