@@ -9,7 +9,7 @@ export class XmlParser {
     constructor() {
         this.parser = new XMLParser({
             ignoreAttributes: false,
-            attributeNamePrefix: '@_',
+            attributeNamePrefix: '_',
             textNodeName: '#text',
             parseAttributeValue: true,
             trimValues: true,

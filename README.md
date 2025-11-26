@@ -1,6 +1,6 @@
 # VSAC Utility SDK
 
-Node.js SDK for interacting with VSAC (Value Set Authority Center) Utility Endpoints.
+Node.js SDK for interacting with VSAC (Value Set Authority Center) Endpoints.
 
 ## Installation
 
@@ -67,7 +67,7 @@ const oidProgram = await sdk.getOidProgram(
 
 ```javascript
 const versions = await sdk.getOidVersions('2.16.840.1.114222.4.11.836');
-// Returns: { VersionList: { '@_oid': '...', version: [...] } }
+// Returns: { VersionList: { _oid: '...', version: [...] } }
 // Note: XML response automatically converted to JSON
 ```
 
@@ -98,7 +98,7 @@ const tagNames = await sdk.getTagNames();
 
 ```javascript
 const tagValues = await sdk.getTagValues('CMS eMeasure ID');
-// Returns: { tagValues: { '@_tagName': '...', value: [...] } }
+// Returns: { tagValues: { _tagName: '...', value: [...] } }
 // Note: XML response automatically converted to JSON
 ```
 
@@ -180,7 +180,7 @@ Converted JSON:
 ```json
 {
   "VersionList": {
-    "@_oid": "2.16.840.1.114222.4.11.836",
+    "_oid": "2.16.840.1.114222.4.11.836",
     "version": [
       "Latest",
       "eCQM Update 2025-05-08"
@@ -189,13 +189,36 @@ Converted JSON:
 }
 ```
 
+## Testing
+
+This project includes comprehensive E2E integration tests that make real API calls to VSAC.
+
+### Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Create .env file with your API key
+cp env.example .env
+
+# Run all E2E tests
+npm run test:e2e
+
+# Run tests in watch mode
+npm run test:e2e:watch
+
+# Open Vitest UI
+npm run test:e2e:ui
+```
+
 ## API Reference
 
 See the [Utility Endpoints Documentation](./docs/UtilityEndpoints.md) for detailed information about each endpoint.
 
 ## License
 
-ISC
+Apache 2.0
 
 ## Author
 
