@@ -71,7 +71,7 @@ export interface ProfileListResponse {
  */
 export interface TagNamesResponse {
     tagNames: {
-        name: string | string[];
+        name: string[];
     };
 }
 
@@ -81,6 +81,6 @@ export interface TagNamesResponse {
 export interface TagValuesResponse {
     tagValues: {
         _tagName: string,
-        value: string | string[];
+        value: string[] | number[];
     };
 }

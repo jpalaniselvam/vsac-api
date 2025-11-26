@@ -1,2 +1,5 @@
-export { UtilitySDK } from './lib/utilitySDK.js';
+export { UtilityClient } from './lib/utilityClient.js';
+export { SVSClient } from './lib/svsClient.js';
 export type * from './lib/models/util.js';
+export type * from './lib/models/svs.js';
+export type * from './lib/models/config.js';

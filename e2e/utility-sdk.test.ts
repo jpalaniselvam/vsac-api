@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { UtilitySDK } from '../src/lib/utilitySDK.js';
+import { UtilityClient } from '../src/lib/utilityClient.js';
 import type {
     ProgramsResponse,
     ProgramWithReleases,
@@ -24,7 +24,7 @@ import type {
  */
 
 describe('UtilitySDK - E2E Integration Tests', () => {
-    let sdk: UtilitySDK;
+    let sdk: UtilityClient;
     const BASE_URL = process.env.VSAC_BASE_URL || 'https://vsac.nlm.nih.gov';
     const API_KEY = process.env.VSAC_API_KEY || '';
 
@@ -37,7 +37,7 @@ describe('UtilitySDK - E2E Integration Tests', () => {
 
     beforeAll(() => {
         // Initialize SDK with configuration
-        sdk = new UtilitySDK({
+        sdk = new UtilityClient({
             baseURL: BASE_URL,
             apiKey: API_KEY
         });
@@ -194,7 +194,7 @@ describe('UtilitySDK - E2E Integration Tests', () => {
             expect(response).toBeDefined();
             expect(response.tagNames).toBeDefined();
             expect(response.tagNames.name).toBeDefined();
-            expect(typeof response.tagNames.name).toBe('string');
+            expect(['number', 'string']).toContain(typeof response.tagNames.name[0]);
         }, timeout);
     })
 
@@ -204,7 +204,8 @@ describe('UtilitySDK - E2E Integration Tests', () => {
             expect(response).toBeDefined();
             expect(response.tagValues).toBeDefined();
             expect(response.tagValues.value).toBeDefined();
-            expect(typeof response.tagValues.value).toBe('string');
+            expect(Array.isArray(response.tagValues.value)).toBe(true);
+            expect(['number', 'string']).toContain(typeof response.tagValues.value[0]);
         }, timeout);
 
         it('should throw error for empty tag name', async () => {
@@ -229,7 +230,7 @@ describe('UtilitySDK - E2E Integration Tests', () => {
             console.log(JSON.stringify(response.tagValues.value));
             expect(response.tagValues.value.length).toBeGreaterThan(0);
             expect(response.tagValues.value[0]).toBeDefined();
-            expect(typeof response.tagValues.value[0]).toBe('string');
+            expect(['number', 'string']).toContain(typeof response.tagValues.value[0]);
         }, timeout);
 
         it('should throw error for empty tag name', async () => {
