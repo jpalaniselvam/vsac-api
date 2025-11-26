@@ -1,4 +1,4 @@
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, type X2jOptions } from 'fast-xml-parser';
 
 /**
  * XML Parser utility for converting XML responses to JSON
@@ -6,7 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 export class XmlParser {
     private parser: XMLParser;
 
-    constructor() {
+    constructor(overrideOptions?: X2jOptions) {
         this.parser = new XMLParser({
             ignoreAttributes: false,
             attributeNamePrefix: '_',
@@ -14,6 +14,7 @@ export class XmlParser {
             parseAttributeValue: true,
             trimValues: true,
             ignoreDeclaration: true,
+            ...overrideOptions
         });
     }
 
