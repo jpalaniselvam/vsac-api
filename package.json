@@ -18,7 +18,8 @@
     "test:e2e": "vitest run e2e",
     "test:e2e:watch": "vitest watch e2e",
     "test:e2e:ui": "vitest --ui e2e",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write \"{src,tests,e2e}/**/*.{ts,js,json}\""
   },
   "author": "Jeyamurugan Palaniselvam",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "@types/node": "^22.10.2",
     "@vitest/ui": "^4.0.14",
     "dotenv": "^17.2.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.3",
     "vitest": "^4.0.14"
   },
