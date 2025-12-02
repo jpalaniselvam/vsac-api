@@ -5,7 +5,7 @@
  * from the VSAC SVS API.
  */
 
-import { SvsSDK } from '../src/index.js';
+import { SVSClient } from '../src/index.js';
 
 // Initialize the SDK with your configuration
 const sdk = new SVSClient({
