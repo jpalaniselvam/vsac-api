@@ -1,4 +1,5 @@
 import { HttpClient } from './common/httpClient.js';
+import type { Cache } from './common/cache.js';
 import type {
   FHIRValueSet,
   FHIRCodeSystem,
@@ -21,10 +22,11 @@ export class FHIRClient {
    * Create a new FHIR Client
    * @param apiKey - UMLS API Key
    * @param baseURL - Optional base URL (defaults to https://cts.nlm.nih.gov/fhir)
+   * @param cache - Optional cache instance
    */
-  constructor(apiKey: string, baseURL: string = 'https://cts.nlm.nih.gov/fhir/res') {
+  constructor(apiKey: string, baseURL: string = 'https://cts.nlm.nih.gov/fhir/res', cache?: Cache) {
     this.apiKey = apiKey;
-    this.httpClient = new HttpClient(baseURL);
+    this.httpClient = new HttpClient(baseURL, cache);
   }
 
   /**

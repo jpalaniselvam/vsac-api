@@ -45,7 +45,7 @@ export class SVSClient {
       throw new Error('API Key is required for SVS API authentication');
     }
 
-    this.client = new HttpClient(config.baseURL);
+    this.client = new HttpClient(config.baseURL, config.cache);
     this.apiKey = config.apiKey;
   }
 

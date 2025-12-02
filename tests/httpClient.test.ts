@@ -497,4 +497,120 @@ describe('HttpClient - Unit Tests', () => {
       await expect(client.get('/test', { timeout: 1000 })).rejects.toThrow('Request timeout');
     });
   });
+
+  describe('get - Caching', () => {
+    it('should use cache when available', async () => {
+      const mockCache = {
+        get: vi.fn().mockResolvedValue({ cached: true }),
+        set: vi.fn().mockResolvedValue(undefined)
+      };
+
+      const clientWithCache = new HttpClient('https://example.com', mockCache);
+      const result = await clientWithCache.get('/test');
+
+      expect(result).toEqual({ cached: true });
+      expect(mockCache.get).toHaveBeenCalledWith('https://example.com/test');
+      expect(mockCache.set).not.toHaveBeenCalled();
+    });
+
+    it('should make request on cache miss and store result', async () => {
+      const mockCache = {
+        get: vi.fn().mockResolvedValue(null),
+        set: vi.fn().mockResolvedValue(undefined)
+      };
+
+      vi.spyOn(https, 'request').mockImplementation((options: any, callback: any) => {
+        const mockResponse = {
+          statusCode: 200,
+          headers: { 'content-type': 'application/json' },
+          on: vi.fn((event: string, handler: any) => {
+            if (event === 'data') {
+              handler(Buffer.from('{"result":"success"}'));
+            } else if (event === 'end') {
+              handler();
+            }
+          })
+        };
+
+        callback(mockResponse);
+
+        return {
+          on: vi.fn(),
+          end: vi.fn(),
+          setTimeout: vi.fn()
+        } as any;
+      });
+
+      const clientWithCache = new HttpClient('https://example.com', mockCache);
+      const result = await clientWithCache.get('/test');
+
+      expect(result).toEqual({ result: 'success' });
+      expect(mockCache.get).toHaveBeenCalledWith('https://example.com/test');
+      expect(mockCache.set).toHaveBeenCalledWith('https://example.com/test', { result: 'success' }, undefined);
+    });
+
+    it('should respect custom TTL from options', async () => {
+      const mockCache = {
+        get: vi.fn().mockResolvedValue(null),
+        set: vi.fn().mockResolvedValue(undefined)
+      };
+
+      vi.spyOn(https, 'request').mockImplementation((options: any, callback: any) => {
+        const mockResponse = {
+          statusCode: 200,
+          headers: { 'content-type': 'application/json' },
+          on: vi.fn((event: string, handler: any) => {
+            if (event === 'data') {
+              handler(Buffer.from('{"result":"success"}'));
+            } else if (event === 'end') {
+              handler();
+            }
+          })
+        };
+
+        callback(mockResponse);
+
+        return {
+          on: vi.fn(),
+          end: vi.fn(),
+          setTimeout: vi.fn()
+        } as any;
+      });
+
+      const clientWithCache = new HttpClient('https://example.com', mockCache);
+      await clientWithCache.get('/test', { ttl: 5000 });
+
+      expect(mockCache.set).toHaveBeenCalledWith('https://example.com/test', { result: 'success' }, 5000);
+    });
+
+    it('should work without cache', async () => {
+      vi.spyOn(https, 'request').mockImplementation((options: any, callback: any) => {
+        const mockResponse = {
+          statusCode: 200,
+          headers: { 'content-type': 'application/json' },
+          on: vi.fn((event: string, handler: any) => {
+            if (event === 'data') {
+              handler(Buffer.from('{"result":"success"}'));
+            } else if (event === 'end') {
+              handler();
+            }
+          })
+        };
+
+        callback(mockResponse);
+
+        return {
+          on: vi.fn(),
+          end: vi.fn(),
+          setTimeout: vi.fn()
+        } as any;
+      });
+
+      const clientWithoutCache = new HttpClient('https://example.com');
+      const result = await clientWithoutCache.get('/test');
+
+      expect(result).toEqual({ result: 'success' });
+    });
+  });
 });
+
