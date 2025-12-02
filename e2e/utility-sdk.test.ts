@@ -1,14 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { UtilityClient } from '../src/lib/utilityClient.js';
-import type {
-  ProgramsResponse,
-  ProgramWithReleases,
-  VersionListResponse,
-  ProfileListResponse,
-  LatestProfileResponse,
-  TagNamesResponse,
-  TagValuesResponse
-} from '../src/lib/models/util.js';
 
 /**
  * E2E Integration Tests for UtilitySDK
