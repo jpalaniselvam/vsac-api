@@ -84,7 +84,7 @@ export class FHIRClient {
    * @param params - Validation parameters
    * @returns Parameters resource (true/false) or OperationOutcome
    */
-  async validateCode(params: ValidateCodeParams): Promise<FHIRParameters | FHIROperationOutcome> {
+  async validateCode(oid: string, params: ValidateCodeParams): Promise<FHIRParameters | FHIROperationOutcome> {
     const queryParams = new URLSearchParams();
     queryParams.append('_format', 'json');
     queryParams.append('code', params.code);
@@ -94,8 +94,7 @@ export class FHIRClient {
     if (params.display) queryParams.append('display', params.display);
     if (params.date) queryParams.append('date', params.date);
     if (params.abstract) queryParams.append('abstract', 'true');
-
-    return this.httpClient.get(`ValueSet/$validate-code?${queryParams.toString()}`, {
+    return this.httpClient.get(`ValueSet/${oid}/$validate-code?${queryParams.toString()}`, {
       headers: this.getHeaders()
     }) as Promise<FHIRParameters | FHIROperationOutcome>;
   }
