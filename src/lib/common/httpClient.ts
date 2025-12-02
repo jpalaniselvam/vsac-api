@@ -39,7 +39,7 @@ export class HttpClient {
     }
 
     const protocol = url.protocol === 'https:' ? https : http;
-
+    console.log(url.hostname + url.pathname + url.search);
     return new Promise((resolve, reject) => {
       const requestOptions: http.RequestOptions = {
         hostname: url.hostname,
