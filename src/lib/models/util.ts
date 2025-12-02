@@ -4,6 +4,7 @@
 export interface RequestOptions {
   headers?: Record<string, string>;
   timeout?: number;
+  ttl?: number;
 }
 
 /**

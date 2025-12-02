@@ -2,6 +2,7 @@ import http from 'node:http';
 import https from 'node:https';
 import { XmlParser } from './xmlParser.js';
 import type { RequestOptions } from '../models/util.js';
+import type { Cache } from './cache.js';
 
 /**
  * HTTP Client utility for making API requests
@@ -9,10 +10,14 @@ import type { RequestOptions } from '../models/util.js';
 export class HttpClient {
   private baseURL: string;
   private xmlParser: XmlParser;
+  private cache?: Cache;
 
-  constructor(baseURL: string) {
+  constructor(baseURL: string, cache?: Cache) {
     this.baseURL = baseURL;
     this.xmlParser = new XmlParser();
+    if (cache) {
+      this.cache = cache;
+    }
   }
 
   /**
@@ -23,6 +28,16 @@ export class HttpClient {
    */
   async get(path: string, options: RequestOptions = {}): Promise<unknown> {
     const url = new URL(path, this.baseURL);
+
+    // Check cache
+    if (this.cache) {
+      const cacheKey = url.toString();
+      const cachedResponse = await this.cache.get(cacheKey);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+    }
+
     const protocol = url.protocol === 'https:' ? https : http;
     console.log(url.hostname + url.pathname + url.search);
     return new Promise((resolve, reject) => {
@@ -67,6 +82,12 @@ export class HttpClient {
             }
 
             resolve(parsedData);
+
+            // Store in cache
+            if (this.cache) {
+              const cacheKey = url.toString();
+              this.cache.set(cacheKey, parsedData, options.ttl);
+            }
           } catch (error) {
             const message = error instanceof Error ? error.message : 'Unknown error';
             reject(new Error(`Failed to parse response: ${message}`));
