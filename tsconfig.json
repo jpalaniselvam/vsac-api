@@ -8,12 +8,8 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "lib": [
-      "esnext"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    "types": ["node"],
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
@@ -37,7 +33,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

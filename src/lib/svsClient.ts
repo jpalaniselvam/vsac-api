@@ -2,7 +2,7 @@ import { HttpClient } from './common/httpClient.js';
 import type { SDKConfig } from './models/config.js';
 import type {
   ValueSet,
-  DescribedValueSet,
+  ValueSetWithMetadata,
   RetrieveValueSetParams,
   RetrieveValueSetXMLResponse,
   RetrieveMultipleValueSetsXMLResponse,
@@ -138,7 +138,7 @@ export class SVSClient {
    */
   private transformMultipleValueSetsResponse(
     response: RetrieveMultipleValueSetsXMLResponse
-  ): DescribedValueSet[] {
+  ): ValueSetWithMetadata[] {
     const describedValueSets =
       response['ns0:RetrieveMultipleValueSetsResponse']['ns0:DescribedValueSet'];
 
@@ -262,7 +262,7 @@ export class SVSClient {
    * });
    * ```
    */
-  async retrieveMultipleValueSets(params: RetrieveValueSetParams): Promise<DescribedValueSet[]> {
+  async retrieveMultipleValueSets(params: RetrieveValueSetParams): Promise<ValueSetWithMetadata[]> {
     if (!params.id && !params.tagName) {
       throw new Error('Either id or tagName parameter is required');
     }

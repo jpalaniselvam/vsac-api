@@ -10,20 +10,14 @@ export interface Concept {
 }
 
 /**
- * Value Set response from RetrieveValueSet endpoint
+ * Complete Value Set response with metadata from RetrieveMultipleValueSets endpoint
+ * Includes all available fields including metadata
  */
-export interface ValueSet {
+export interface ValueSetWithMetadata {
   id: string;
   displayName: string;
   version: string;
   concepts: Concept[];
-}
-
-/**
- * Described Value Set response from RetrieveMultipleValueSets endpoint
- * Includes metadata in addition to concepts
- */
-export interface DescribedValueSet extends ValueSet {
   source: string | undefined;
   purpose: string | undefined;
   type: string | undefined;
@@ -31,6 +25,18 @@ export interface DescribedValueSet extends ValueSet {
   status: string | undefined;
   revisionDate: string | undefined;
 }
+
+/**
+ * Alias for ValueSetWithMetadata to match user terminology
+ */
+export type DescribedValueSet = ValueSetWithMetadata;
+
+/**
+ * Basic Value Set response from RetrieveValueSet endpoint
+ * Contains only core fields without metadata
+ */
+export interface ValueSet
+  extends Pick<ValueSetWithMetadata, 'id' | 'displayName' | 'version' | 'concepts'> {}
 
 /**
  * Parameters for retrieving a value set
