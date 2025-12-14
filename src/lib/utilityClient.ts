@@ -1,5 +1,4 @@
 import { HttpClient } from './common/index.js';
-import type { SDKConfig } from './models/config.js';
 import type {
   ProgramsResponse,
   ProgramWithReleases,
