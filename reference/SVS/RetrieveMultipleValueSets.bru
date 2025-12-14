@@ -1,0 +1,41 @@
+meta {
+  name: RetrieveMultipleValueSets
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseURL}}/RetrieveMultipleValueSets?tagName=CMS eMeasure ID&tagValue=CMS129v15
+  body: none
+  auth: basic
+}
+
+params:query {
+  tagName: CMS eMeasure ID
+  tagValue: CMS129v15
+  ~id: {{oid}}
+  ~profile: eCQM Update 2025-05-08
+  ~includeDraft: false
+  ~release: 
+  ~effectivceDate: 2025-03-08
+  ~programType: eCQM
+}
+
+headers {
+  Accept: application/xml
+}
+
+auth:basic {
+  username: 
+  password: {{apiKey}}
+}
+
+vars:pre-request {
+  oid: 2.16.840.1.113762.1.4.1
+  oids: 2.16.840.1.113762.1.4.1,2.16.840.1.113883.3.464.1003.103.12.1001
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

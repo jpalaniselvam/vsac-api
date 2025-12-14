@@ -1,0 +1,33 @@
+meta {
+  name: RetrieveValueSet
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseURL}}/RetrieveValueSet?id={{oid}}
+  body: none
+  auth: basic
+}
+
+params:query {
+  id: {{oid}}
+}
+
+headers {
+  Accept: application/xml
+}
+
+auth:basic {
+  username: 
+  password: {{apiKey}}
+}
+
+vars:pre-request {
+  oid: 2.16.840.1.113762.1.4.1
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

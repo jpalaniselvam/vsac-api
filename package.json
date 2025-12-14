@@ -1,0 +1,61 @@
+{
+  "name": "@cql-labs/vsac-api",
+  "version": "0.1.0",
+  "description": "Javascript SDK for interacting with Value Set Authority Center (VSAC) APIs.",
+  "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./node/fileCache": {
+      "types": "./dist/lib/node/fileCache.d.ts",
+      "import": "./dist/lib/node/fileCache.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:unit": "vitest run tests",
+    "test:unit:watch": "vitest watch tests",
+    "test:unit:ui": "vitest --ui tests",
+    "test:e2e": "vitest run e2e",
+    "test:e2e:watch": "vitest watch e2e",
+    "test:e2e:ui": "vitest --ui e2e",
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write \"{src,tests,e2e}/**/*.{ts,js,json}\"",
+    "prepare": "husky",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Jeyamurugan Palaniselvam",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vitest/ui": "^4.0.14",
+    "dotenv": "^17.2.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.0.14"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.3.2"
+  },
+  "lint-staged": {
+    "**/*.{ts,js,json,md}": [
+      "prettier --write"
+    ]
+  }
+}

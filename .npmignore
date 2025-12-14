@@ -1,0 +1,12 @@
+src
+e2e
+tests
+.env
+.github
+.idea
+.vscode
+.DS_Store
+*.log
+node_modules
+dist/**/*
+!dist/
