@@ -5,7 +5,7 @@ A modern, type-safe Node.js SDK for interacting with the National Library of Med
 ## Installation
 
 ```bash
-npm install vsac-api
+npm install @cql-labs/vsac-api
 ```
 
 ## Features
@@ -19,7 +19,7 @@ npm install vsac-api
 ## Quick Start
 
 ```typescript
-import { SVSClient, UtilityClient } from 'vsac-api';
+import { SVSClient, UtilityClient } from '@cql-labs/vsac-api';
 
 // Initialize the SVS Client
 const svs = new SVSClient({
