@@ -11,6 +11,7 @@ import { clear } from 'console';
  * - Response parsing (JSON and XML)
  * - Error handling
  * - Timeout handling
+ * - cache handling
  */
 
 describe('HttpClient - Unit Tests', () => {

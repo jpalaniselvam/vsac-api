@@ -46,7 +46,7 @@ describe('SVSClient - E2E Integration Tests', () => {
     it(
       'should retrieve value set by ID',
       async () => {
-        const response = await sdk.retrieveValueSet({ id: ETHNICITY_OID });
+        const response = await sdk.retrieveValueSet(ETHNICITY_OID);
 
         expect(response).toBeDefined();
         expect(response.id).toBe(ETHNICITY_OID);
@@ -68,14 +68,14 @@ describe('SVSClient - E2E Integration Tests', () => {
     it(
       'should retrieve value set metadata by ID',
       async () => {
-        const response = await sdk.retrieveMultipleValueSets({ id: RACE_OID });
+        const response = await sdk.retrieveMultipleValueSets({ ids: [RACE_OID, ETHNICITY_OID] });
 
         expect(response).toBeDefined();
         expect(Array.isArray(response)).toBe(true);
-        expect(response.length).toBeGreaterThan(0);
+        expect(response.length).toBe(2);
 
         const valueSet = response[0];
-        expect(valueSet.id).toBe(RACE_OID);
+        expect([RACE_OID, ETHNICITY_OID].includes(valueSet.id)).toBe(true);
         expect(valueSet.displayName).toBeDefined();
         expect(valueSet.source).toBeDefined();
         expect(valueSet.status).toBeDefined();
@@ -92,12 +92,12 @@ describe('SVSClient - E2E Integration Tests', () => {
         // Using a try-catch to allow for potential data changes, but expecting success for stable OIDs
         try {
           const response = await sdk.retrieveMultipleValueSets({
-            id: RACE_OID,
+            ids: [RACE_OID],
             version: TEST_VERSION
           });
 
           expect(response).toBeDefined();
-          expect(response.length).toBeGreaterThan(0);
+          expect(response.length).toBe(1);
           expect(response[0].id).toBe(RACE_OID);
           expect(response[0].version).toBeDefined();
         } catch (error) {
@@ -111,12 +111,12 @@ describe('SVSClient - E2E Integration Tests', () => {
       'should retrieve value set by ID and profile',
       async () => {
         const response = await sdk.retrieveMultipleValueSets({
-          id: RACE_OID,
+          ids: [RACE_OID],
           profile: TEST_PROFILE
         });
 
         expect(response).toBeDefined();
-        expect(response.length).toBeGreaterThan(0);
+        expect(response.length).toBe(1);
         expect(response[0].id).toBe(RACE_OID);
       },
       timeout
@@ -127,12 +127,12 @@ describe('SVSClient - E2E Integration Tests', () => {
       async () => {
         try {
           const response = await sdk.retrieveMultipleValueSets({
-            id: RACE_OID,
+            ids: [RACE_OID],
             effectiveDate: TEST_EFFECTIVE_DATE
           });
 
           expect(response).toBeDefined();
-          expect(response.length).toBeGreaterThan(0);
+          expect(response.length).toBe(1);
           expect(response[0].id).toBe(RACE_OID);
         } catch (error) {
           console.warn(`Skipping effectiveDate test: ${error}`);
@@ -146,13 +146,13 @@ describe('SVSClient - E2E Integration Tests', () => {
       async () => {
         try {
           const response = await sdk.retrieveMultipleValueSets({
-            id: RACE_OID,
+            ids: [RACE_OID],
             effectiveDate: TEST_EFFECTIVE_DATE,
             programType: TEST_PROGRAM_TYPE
           });
 
           expect(response).toBeDefined();
-          expect(response.length).toBeGreaterThan(0);
+          expect(response.length).toBe(1);
           expect(response[0].id).toBe(RACE_OID);
         } catch (error) {
           console.warn(`Skipping programType test: ${error}`);

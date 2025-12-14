@@ -41,9 +41,9 @@ export interface ValueSet
 /**
  * Parameters for retrieving a value set
  */
-export interface RetrieveValueSetParams {
+export interface RetrieveMultipleValueSetParams {
   /** Value set object unique identifier (OID) */
-  id?: string;
+  ids?: string[];
   /** Name of a program release */
   release?: string;
   /** A release version label that uniquely identifies a specific value set expansion */

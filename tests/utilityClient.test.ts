@@ -14,29 +14,17 @@ import { UtilityClient } from '../src/lib/utilityClient.js';
 describe('UtilityClient - Unit Tests', () => {
   describe('Constructor', () => {
     it('should throw error when config is missing', () => {
-      expect(() => new UtilityClient(null as any)).toThrow(
-        'Configuration with baseURL is required'
-      );
-    });
-
-    it('should throw error when baseURL is missing', () => {
-      expect(() => new UtilityClient({} as any)).toThrow('Configuration with baseURL is required');
+      expect(() => new UtilityClient(null as any)).toThrow('Base URL is required');
     });
 
     it('should create instance with valid config (baseURL only)', () => {
-      const sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      const sdk = new UtilityClient('https://vsac.nlm.nih.gov');
       expect(sdk).toBeDefined();
       expect(sdk).toBeInstanceOf(UtilityClient);
     });
 
     it('should create instance with valid config (baseURL and apiKey)', () => {
-      const sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: 'test-api-key'
-      });
+      const sdk = new UtilityClient('https://vsac.nlm.nih.gov');
       expect(sdk).toBeDefined();
       expect(sdk).toBeInstanceOf(UtilityClient);
     });
@@ -46,10 +34,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty program name', async () => {
@@ -69,10 +54,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty OID', async () => {
@@ -92,10 +74,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty OID', async () => {
@@ -141,10 +120,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty OID', async () => {
@@ -164,10 +140,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty program name', async () => {
@@ -191,10 +164,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should throw error for empty tag name', async () => {
@@ -214,10 +184,7 @@ describe('UtilityClient - Unit Tests', () => {
     let sdk: UtilityClient;
 
     beforeEach(() => {
-      sdk = new UtilityClient({
-        baseURL: 'https://vsac.nlm.nih.gov',
-        apiKey: ''
-      });
+      sdk = new UtilityClient('https://vsac.nlm.nih.gov');
     });
 
     it('should handle special characters in program name', async () => {

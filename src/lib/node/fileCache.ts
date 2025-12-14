@@ -2,7 +2,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import type { Cache } from '../common/cache.js';
-import type { ValueSet, DescribedValueSet } from '../models/svs.js';
 
 /**
  * File-based cache implementation
@@ -45,7 +44,7 @@ export class FileCache implements Cache {
   /**
    * Get a value from the cache
    */
-  async get(key: string): Promise<ValueSet | DescribedValueSet | null> {
+  async get(key: string): Promise<unknown> {
     const hash = this.getHash(key);
 
     try {
@@ -86,7 +85,7 @@ export class FileCache implements Cache {
   /**
    * Set a value in the cache
    */
-  async set(key: string, value: ValueSet | DescribedValueSet, ttl?: number): Promise<void> {
+  async set(key: string, value: unknown, ttl?: number): Promise<void> {
     const hash = this.getHash(key);
     const expirationTime = Date.now() + (ttl || this.defaultTTL);
     const filename = `${hash}.${expirationTime}.json`;

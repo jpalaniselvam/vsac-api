@@ -3,7 +3,7 @@ import type { SDKConfig } from './models/config.js';
 import type {
   ValueSet,
   ValueSetWithMetadata,
-  RetrieveValueSetParams,
+  RetrieveMultipleValueSetParams,
   RetrieveValueSetXMLResponse,
   RetrieveMultipleValueSetsXMLResponse,
   Concept
@@ -44,9 +44,108 @@ export class SVSClient {
     if (!config.apiKey) {
       throw new Error('API Key is required for SVS API authentication');
     }
+    // Normalize baseURL to remove trailing slash for consistency
+    const sanitizedBaseURL = config.baseURL.endsWith('/')
+      ? config.baseURL.slice(0, -1)
+      : config.baseURL;
 
-    this.client = new HttpClient(config.baseURL, config.cache);
+    this.client = new HttpClient(sanitizedBaseURL, config.cache);
     this.apiKey = config.apiKey;
+  }
+
+  /**
+   * Retrieve a value set concept list without metadata
+   *
+   * @param params - Request parameters
+   * @returns Value set with concept list
+   *
+   * @example
+   * ```typescript
+   * // Retrieve most recent value set expansion
+   * const valueSet = await sdk.retrieveValueSet('2.16.840.1.114222.4.11.837');
+   * console.log(valueSet.displayName); // "Ethnicity"
+   * console.log(valueSet.concepts); // Array of concepts
+   * ```
+   */
+  async retrieveValueSet(id: string): Promise<ValueSet> {
+    const queryString = this.buildQueryString({ ids: [id] });
+    const response = (await this.client.get(`/vsac/svs/RetrieveValueSet${queryString}`, {
+      headers: this.getAuthHeaders()
+    })) as RetrieveValueSetXMLResponse;
+
+    return this.transformValueSetResponse(response);
+  }
+
+  /**
+   * Retrieve value set metadata and concept list
+   *
+   * @param params - Request parameters
+   * @returns Array of described value sets with metadata
+   *
+   * @example
+   * ```typescript
+   * // Retrieve most recent value set expansion with metadata
+   * const valueSets = await sdk.retrieveMultipleValueSets({ id: '2.16.840.1.114222.4.11.836' });
+   * console.log(valueSets[0].displayName); // "Race"
+   * console.log(valueSets[0].source); // "Centers for Disease Control..."
+   * console.log(valueSets[0].status); // "Active"
+   *
+   * // Retrieve by program release
+   * const releaseSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   release: 'eCQM Update 2020-05-07'
+   * });
+   *
+   * // Retrieve by version
+   * const versionSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   version: '20170505'
+   * });
+   *
+   * // Retrieve with expansion profile
+   * const profileSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   profile: 'Most Recent Code System Versions in VSAC'
+   * });
+   *
+   * // Retrieve draft value set (requires author/steward permissions)
+   * const draftSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   profile: 'eCQM Update 2020-05-07',
+   *   includeDraft: 'yes'
+   * });
+   *
+   * // Retrieve by tag
+   * const tagSets = await sdk.retrieveMultipleValueSets({
+   *   tagName: 'CMS eMeasure ID',
+   *   tagValue: 'CMS68v9'
+   * });
+   *
+   * // Retrieve by effective date
+   * const dateSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   effectiveDate: '20200507'
+   * });
+   *
+   * // Retrieve by effective date and program type
+   * const programDateSets = await sdk.retrieveMultipleValueSets({
+   *   id: '2.16.840.1.114222.4.11.836',
+   *   effectiveDate: '20200507',
+   *   programType: 'eCQM'
+   * });
+   * ```
+   */
+  async retrieveMultipleValueSets(
+    params: RetrieveMultipleValueSetParams
+  ): Promise<ValueSetWithMetadata[]> {
+    if (!params.ids && !(params.tagName && params.tagValue)) {
+      throw new Error('Either ids or tagName and tagValue parameters are required');
+    }
+    const queryString = this.buildQueryString(params);
+    const response = (await this.client.get(`/vsac/svs/RetrieveMultipleValueSets${queryString}`, {
+      headers: this.getAuthHeaders()
+    })) as RetrieveMultipleValueSetsXMLResponse;
+    return this.transformMultipleValueSetsResponse(response);
   }
 
   /**
@@ -65,10 +164,10 @@ export class SVSClient {
    * @param params - Request parameters
    * @returns Query string
    */
-  private buildQueryString(params: RetrieveValueSetParams): string {
+  private buildQueryString(params: RetrieveMultipleValueSetParams): string {
     const queryParams = new URLSearchParams();
 
-    if (params.id) queryParams.append('id', params.id);
+    if (params.ids) queryParams.append('id', params.ids.join(','));
     if (params.release) queryParams.append('release', params.release);
     if (params.version) queryParams.append('version', params.version);
     if (params.profile) queryParams.append('profile', params.profile);
@@ -174,104 +273,5 @@ export class SVSClient {
         revisionDate: valueSetData['ns0:RevisionDate']
       };
     });
-  }
-
-  /**
-   * Retrieve a value set concept list without metadata
-   *
-   * @param params - Request parameters
-   * @returns Value set with concept list
-   *
-   * @example
-   * ```typescript
-   * // Retrieve most recent value set expansion
-   * const valueSet = await sdk.retrieveValueSet({ id: '2.16.840.1.114222.4.11.837' });
-   * console.log(valueSet.displayName); // "Ethnicity"
-   * console.log(valueSet.concepts); // Array of concepts
-   * ```
-   */
-  async retrieveValueSet(params: RetrieveValueSetParams): Promise<ValueSet> {
-    if (!params.id && !params.tagName) {
-      throw new Error('Either id or tagName parameter is required');
-    }
-
-    const queryString = this.buildQueryString(params);
-    const response = (await this.client.get(`/vsac/svs/RetrieveValueSet${queryString}`, {
-      headers: this.getAuthHeaders()
-    })) as RetrieveValueSetXMLResponse;
-
-    return this.transformValueSetResponse(response);
-  }
-
-  /**
-   * Retrieve value set metadata and concept list
-   *
-   * @param params - Request parameters
-   * @returns Array of described value sets with metadata
-   *
-   * @example
-   * ```typescript
-   * // Retrieve most recent value set expansion with metadata
-   * const valueSets = await sdk.retrieveMultipleValueSets({ id: '2.16.840.1.114222.4.11.836' });
-   * console.log(valueSets[0].displayName); // "Race"
-   * console.log(valueSets[0].source); // "Centers for Disease Control..."
-   * console.log(valueSets[0].status); // "Active"
-   *
-   * // Retrieve by program release
-   * const releaseSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   release: 'eCQM Update 2020-05-07'
-   * });
-   *
-   * // Retrieve by version
-   * const versionSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   version: '20170505'
-   * });
-   *
-   * // Retrieve with expansion profile
-   * const profileSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   profile: 'Most Recent Code System Versions in VSAC'
-   * });
-   *
-   * // Retrieve draft value set (requires author/steward permissions)
-   * const draftSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   profile: 'eCQM Update 2020-05-07',
-   *   includeDraft: 'yes'
-   * });
-   *
-   * // Retrieve by tag
-   * const tagSets = await sdk.retrieveMultipleValueSets({
-   *   tagName: 'CMS eMeasure ID',
-   *   tagValue: 'CMS68v9'
-   * });
-   *
-   * // Retrieve by effective date
-   * const dateSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   effectiveDate: '20200507'
-   * });
-   *
-   * // Retrieve by effective date and program type
-   * const programDateSets = await sdk.retrieveMultipleValueSets({
-   *   id: '2.16.840.1.114222.4.11.836',
-   *   effectiveDate: '20200507',
-   *   programType: 'eCQM'
-   * });
-   * ```
-   */
-  async retrieveMultipleValueSets(params: RetrieveValueSetParams): Promise<ValueSetWithMetadata[]> {
-    if (!params.id && !params.tagName) {
-      throw new Error('Either id or tagName parameter is required');
-    }
-
-    const queryString = this.buildQueryString(params);
-    const response = (await this.client.get(`/vsac/svs/RetrieveMultipleValueSets${queryString}`, {
-      headers: this.getAuthHeaders()
-    })) as RetrieveMultipleValueSetsXMLResponse;
-
-    return this.transformMultipleValueSetsResponse(response);
   }
 }

@@ -20,13 +20,18 @@ export class UtilityClient {
   /**
    * Initialize the Utility SDK
    * @param config - Configuration object
+   * @example
+   * const sdk = new UtilityClient('https://vsac.nlm.nih.gov');
    */
-  constructor(config: SDKConfig) {
-    if (!config || !config.baseURL) {
-      throw new Error('Configuration with baseURL is required');
+  constructor(baseURL: string) {
+    if (!baseURL) {
+      throw new Error('Base URL is required');
     }
 
-    this.client = new HttpClient(config.baseURL);
+    // Normalize baseURL to remove trailing slash for consistency
+    const sanitizedBaseURL = baseURL.endsWith('/') ? baseURL.slice(0, -1) : baseURL;
+
+    this.client = new HttpClient(sanitizedBaseURL);
   }
 
   /**

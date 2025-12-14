@@ -28,10 +28,7 @@ describe('UtilitySDK - E2E Integration Tests', () => {
 
   beforeAll(() => {
     // Initialize SDK with configuration
-    sdk = new UtilityClient({
-      baseURL: BASE_URL,
-      apiKey: API_KEY
-    });
+    sdk = new UtilityClient(BASE_URL);
   });
 
   describe('getPrograms', () => {
